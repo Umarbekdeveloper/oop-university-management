@@ -16,8 +16,8 @@ public class University {
      */
     public University(String name){
         this.name = name;
-        students = new Student[1000];
-        courses = new Course[50];
+        students = new Student[10];
+        courses = new Course[10];
     }
 
     /**
@@ -56,6 +56,13 @@ public class University {
      * @return
      */
     public int enroll(String first, String last){
+        if ((studentIdCounter-10000)>=students.length){
+            Student[] temp = new Student[students.length*2];
+            for (int i = 0; i < temp.length; i++) {
+                System.arraycopy(students, 0, temp, 0, students.length);
+            }
+            students=temp;
+        }
         Student student = new Student(studentIdCounter,first,last);
         students[studentIdCounter-10000] = student;
         studentIdCounter++;
@@ -81,6 +88,13 @@ public class University {
      * @return the unique code assigned to the course
      */
     public int activate(String title, String teacher){
+        if ((courseCodeCounter-10000)>=courses.length){
+            Course[] temp = new Course[courses.length*2];
+            for (int i = 0; i < temp.length; i++) {
+                System.arraycopy(courses, 0, temp, 0, courses.length);
+            }
+            courses=temp;
+        }
         Course course = new Course(courseCodeCounter,title,teacher);
         courses[courseCodeCounter-10] = course;
         courseCodeCounter++;
