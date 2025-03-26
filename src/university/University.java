@@ -1,14 +1,13 @@
 package university;
 
+import list.MyArrayList;
+import list.MyList;
+
 public class University {
     private String name;
-    private String rectorFirstName;
-    private String rectorLastName;
-    private Student[] students;
-    private Course[] courses;
-
-    private int studentIdCounter=10000;
-    private int courseCodeCounter=10;
+    private Rector rector;
+    private MyList students;
+    private MyList courses;
 
     /**
      * Constructor
@@ -16,8 +15,8 @@ public class University {
      */
     public University(String name){
         this.name = name;
-        students = new Student[10];
-        courses = new Course[10];
+        students = new MyArrayList();
+        courses = new MyArrayList();
     }
 
     /**
@@ -35,8 +34,7 @@ public class University {
      * @param last
      */
     public void setRector(String first, String last){
-        this.rectorFirstName = first;
-        this.rectorLastName = last;
+        this.rector = new Rector(first,last);
     }
 
     /**
@@ -45,7 +43,7 @@ public class University {
      * @return
      */
     public String getRector(){
-        return rectorFirstName+" "+rectorLastName;
+        return rector.toString();
     }
 
     /**
@@ -56,16 +54,8 @@ public class University {
      * @return
      */
     public int enroll(String first, String last){
-        if ((studentIdCounter-10000)>=students.length){
-            Student[] temp = new Student[students.length*2];
-            for (int i = 0; i < temp.length; i++) {
-                System.arraycopy(students, 0, temp, 0, students.length);
-            }
-            students=temp;
-        }
-        Student student = new Student(studentIdCounter,first,last);
-        students[studentIdCounter-10000] = student;
-        studentIdCounter++;
+        Student student = new Student(students.size()+10000, first,last);
+        students.add(student);
         return student.getId();
     }
 
@@ -76,7 +66,7 @@ public class University {
      * @return information about the student
      */
     public String student(int id){
-        Student student = students[id-10000];
+        Student student = getStudentById(id);
         return student.toString();
     }
 
@@ -88,16 +78,8 @@ public class University {
      * @return the unique code assigned to the course
      */
     public int activate(String title, String teacher){
-        if ((courseCodeCounter-10000)>=courses.length){
-            Course[] temp = new Course[courses.length*2];
-            for (int i = 0; i < temp.length; i++) {
-                System.arraycopy(courses, 0, temp, 0, courses.length);
-            }
-            courses=temp;
-        }
-        Course course = new Course(courseCodeCounter,title,teacher);
-        courses[courseCodeCounter-10] = course;
-        courseCodeCounter++;
+        Course course = new Course(courses.size()+10,title,teacher);
+        courses.add(course);
         return course.getCode();
     }
 
@@ -108,7 +90,7 @@ public class University {
      * @return information about the course
      */
     public String course(int code){
-        Course course = courses[code-10];
+        Course course = getCourseByCode(code);
         return course.toString();
     }
 
@@ -118,8 +100,8 @@ public class University {
      * @param courseCode id of the course
      */
     public void register(int studentID, int courseCode){
-        Student student = students[studentID-10000];
-        Course course =courses[courseCode-10];
+        Student student = getStudentById(studentID);
+        Course course =getCourseByCode(courseCode);
         course.register(student);
     }
 
@@ -130,7 +112,7 @@ public class University {
      * @return list of attendees separated by "\n"
      */
     public String listAttendees(int courseCode){
-        Course course = courses[courseCode-10];
+        Course course = getCourseByCode(courseCode);
         return course.listAttendees();
     }
 
@@ -141,9 +123,16 @@ public class University {
      * @return list of courses the student is registered for
      */
     public String studyPlan(int studentID){
-        Student student = students[studentID-10000];
+        Student student = getStudentById(studentID);
         return student.studyPlan();
     }
 
+    private  Student getStudentById(int studentID){
+        return (Student) students.get(studentID-10000);
+    }
+
+    private  Course getCourseByCode(int courseCode){
+        return (Course) courses.get(courseCode-10);
+    }
 
 }

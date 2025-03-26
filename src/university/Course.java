@@ -1,19 +1,20 @@
 package university;
 
+import list.MyArrayList;
+import list.MyList;
+
 public class Course {
     private String title;
     private String teacher;
     private int code;
 
-    private Student[] students;
-
-    private int studentCount = 0;
+    private MyList students;
 
     public Course(int code, String title, String teacher) {
         this.title = title;
         this.teacher = teacher;
         this.code = code;
-        students = new Student[50];
+        students = new MyArrayList();
     }
 
     public String getTitle() {
@@ -29,7 +30,7 @@ public class Course {
     }
 
     void register(Student student){
-        students[studentCount++] = student;
+        students.add(student);
         student.addCourse(this);
     }
 
@@ -40,8 +41,8 @@ public class Course {
 
     public String listAttendees() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < studentCount; i++) {
-            Student student = students[i];
+        for (int i = 0; i < students.size(); i++) {
+            Student student = (Student) students.get(i);
             sb.append(student.toString()).append('\n');
         }
         return sb.toString();

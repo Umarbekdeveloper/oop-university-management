@@ -1,18 +1,20 @@
 package university;
 
+import list.MyArrayList;
+import list.MyList;
+
 public class Student {
     private int id;
     private String firstName;
     private String lastName;
 
-    private Course[] courses;
-    private int courseCount = 0;
+    private MyList courses;
 
     public Student(int id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        courses = new Course[25];
+        courses = new MyArrayList();
     }
 
     public int getId() {
@@ -29,13 +31,13 @@ public class Student {
     }
 
     public void addCourse(Course course) {
-        courses[courseCount++] = course;
+        courses.add(course);
     }
 
     public String studyPlan() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < courseCount; i++) {
-            Course course = courses[i];
+        for (int i = 0; i < courses.size(); i++) {
+            Course course = (Course) courses.get(i);
             sb.append(course.toString()).append('\n');
         }
         return sb.toString();
